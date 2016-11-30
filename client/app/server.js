@@ -94,11 +94,20 @@ function sendXHR(verb, resource, body, cb) {
 
 
 export function getFeedData(user, cb) {
-  // We don't need to send a body, so pass in 'undefined' for the body.
-  sendXHR('GET', '/user/4/feed', undefined, (xhr) => {
-    // Call the callback with the data.
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/user/4/feed');
+  xhr.setRequestHeader('Authorization', 'Bearer eyJpZCI6NH0=');
+  xhr.addEventListener('load', function() {
+  // Call the callback with the data.
     cb(JSON.parse(xhr.responseText));
   });
+  xhr.send();
+
+  // We don't need to send a body, so pass in 'undefined' for the body.
+  // sendXHR('GET', '/user/4/feed', undefined, (xhr) => {
+  //   // Call the callback with the data.
+  //   cb(JSON.parse(xhr.responseText));
+  // });
 }
 
 

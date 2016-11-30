@@ -16,6 +16,7 @@ var db = require('./database');
 
 app.use(bodyParser.text());
 app.use(bodyParser.json());
+app.use(express.static('../client/build'));
 //You run the server from 'server', so '..client/build' is 'server/../client/build'
 //',,' means "go up one directory"
 
@@ -40,7 +41,7 @@ function postStatusUpdate(user, location, contents){
     feedData.contents.unshift(newStatusUpdate._id);
 
     //update the Feed object
-    wd.WRITEDocument('feeds', feedData);
+    wd.writeDocument('feeds', feedData);
 
     //return the newly-posted onject
     return newStatusUpdate;
@@ -62,12 +63,6 @@ function postStatusUpdate(user, location, contents){
       res.status(401).end();
     }
   });
-
-
-
-
-app.use(express.static('../client/build'));
-
 
 
 /**
