@@ -158,8 +158,7 @@ class App extends React.Component {
         </div>
         <ChatPopup />
       </div>
-)
-
+    )
   }
 }
 
