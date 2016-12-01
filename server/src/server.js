@@ -179,6 +179,28 @@ app.put('/feeditem/:feeditemid/likelist/:userid', function(req, res) {
   }
 });
 
+app.put('/feeditem/:feeditemid/content', function(req,res){
+  var fromUser = getUserIdFromToken(req.get('Authorization'));
+  var feedItemId = req.params.feeditemId
+  var feedItem = db.readDocument('feedItems', feedItemId);
+  //Check  if the requester is the author of the feed item
+  if(fromUser === feedItem.contents.author){
+    if(typeof(req.body)!== 'string'){
+      res.status(400).end();
+      return;
+    }
+    //Update text content of Update
+    feedItem.contents.contents  = req.body;
+    writeDocument('feedItems', feedItem);
+    res.send(getFeedItemSync(feedItemId));
+  }
+  else{
+    res.status(401).end();
+  }
+});
+
+
+
 app.delete('/feeditem/:feeditemid', function(req,res){
   var fromUser = getUserIdFromToken(req.get('Authorization'));
   var feedItemId = parseInt(req.params.feeditemid,10);

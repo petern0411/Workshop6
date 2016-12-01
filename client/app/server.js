@@ -175,9 +175,9 @@ export function postComment(feedItemId, author, contents, cb) {
 export function likeFeedItem(feedItemId, userId, cb) {
   sendXHR('PUT', '/feeditem/' + feedItemId + '/likelist/' + userId,
   undefined, (xhr) => {
-  cb(JSON.parse(xhr.responseText));
+    cb(JSON.parse(xhr.responseText));
   });
-  }
+}
 
 
 /**
@@ -187,7 +187,7 @@ export function likeFeedItem(feedItemId, userId, cb) {
 export function unlikeFeedItem(feedItemId, userId, cb) {
   sendXHR('DELETE', '/feeditem/' + feedItemId + '/likelist/' + userId,
   undefined, (xhr) => {
-  cb(JSON.parse(xhr.responseText));
+    cb(JSON.parse(xhr.responseText));
   });
 }
 
@@ -222,21 +222,21 @@ export function unlikeComment(feedItemId, commentIdx, userId, cb) {
 /**
  * Updates the text in a feed item (assumes a status update)
  */
-export function updateFeedItemText(feedItemId, newContent, cb) {
-  sendXHR('PUT', '/feeditem/' + feedItemId + '/content', newContent, (xhr) => {
-  cb(JSON.parse(xhr.responseText));
-  });
-  }
+ export function updateFeedItemText(feedItemId, newContent, cb) {
+   sendXHR('PUT', '/feeditem/' + feedItemId + '/content', newContent, (xhr) => {
+     cb(JSON.parse(xhr.responseText));
+   });
+ }
 
 
-/**
+ /**
  * Deletes a feed item.
  */
-export function deleteFeedItem(feedItemId, cb) {
-  sendXHR('DELETE', '/feeditem/' + feedItemId, undefined, () => {
-  cb();
-  });
-  }
+ export function deleteFeedItem(feedItemId, cb) {
+   sendXHR('DELETE', '/feeditem/' + feedItemId, undefined, () => {
+     cb();
+   });
+ }
 
 
 /**
