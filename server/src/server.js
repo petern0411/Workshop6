@@ -4,6 +4,7 @@ var express = require('express');
 //Creates and Express server.
 var app = express();
 var StatusUpdateSchema = require('./schemas/statusupdate.json');
+var postCommentSchema = require('./schemas/comment.json');
 var validate = require('express-jsonschema').validate;
 var bodyParser = require('body-parser');
 var database = require('./database');
@@ -18,6 +19,8 @@ app.use(bodyParser.json());
 app.use(express.static('../client/build'));
 //You run the server from 'server', so '..client/build' is 'server/../client/build'
 //',,' means "go up one directory"
+
+
 
 
 function postStatusUpdate(user, location, contents){
@@ -72,6 +75,33 @@ validate({ body: StatusUpdateSchema }), function(req, res) {
     }
   });
 
+  function postComment(feedItemId, author, contents) {
+    var feedItem = db.readDocument('feedItems', feedItemId);
+    feedItem.comments.push({
+      "author": author,
+      "contents": contents,
+      "postDate": new Date().getTime(),
+      "likeCounter": []
+    });
+    writeDocument('feedItems', feedItem);
+    // Return a resolved version of the feed item.
+    return feedItem;
+  }
+
+//Post comment
+app.post('/feeditem/:feeditemid/CommentThread',validate({body: postCommentSchema}),function(req,res){
+  var fromUser = getUserIdFromToken(req.get('Authorization'));
+  var body = req.body;
+  if(fromUser === body.author){
+    var newComment = postComment(req.params.feeditemid, body.author, body.contents);
+    res.status(201);
+    // writeDocument('/feedItems', newComment);
+    res.send(newComment);
+  }
+  else{
+    res.status(401).end();
+  }
+});
 
 /**
 * Resolves a feed item. Internal to the server, since it's synchronous.

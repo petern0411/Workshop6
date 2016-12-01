@@ -155,18 +155,14 @@ export function postStatusUpdate(user, location, contents, cb) {
 /**
  * Adds a new comment to the database on the given feed item.
  */
-export function postComment(feedItemId, author, contents, cb) {
-  var feedItem = readDocument('feedItems', feedItemId);
-  feedItem.comments.push({
-    "author": author,
-    "contents": contents,
-    "postDate": new Date().getTime(),
-    "likeCounter": []
-  });
-  writeDocument('feedItems', feedItem);
-  // Return a resolved version of the feed item.
-  emulateServerReturn(getFeedItemSync(feedItemId), cb);
-}
+ export function postComment(feedItemId, author, contents, cb) {
+   sendXHR('POST','/feeditem/' + feedItemId + '/CommentThread/' ,{
+     author: author,
+     contents: contents
+   }, (xhr) => {
+     cb(JSON.parse(xhr.responseText));
+   });
+ }
 
 /**
  * Updates a feed item's likeCounter by adding the user to the likeCounter.
