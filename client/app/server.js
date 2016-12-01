@@ -111,6 +111,7 @@ export function postStatusUpdate(user, location, contents, cb) {
     location: location,
     contents: contents
   }, (xhr) => {
+    // Return the new status update.
     cb(JSON.parse(xhr.responseText));
   });
 }
